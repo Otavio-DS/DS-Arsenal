@@ -12,7 +12,7 @@ window.addEventListener('message', (event) => {
             itemElement.classList.add('menu-item');
             itemElement.innerHTML = `
                 <div class="item populated">
-                    <img src="nui://elite_arsenal/web/images/ak47.png" alt="${item.nameItem}" class="item-image" />
+                    <img src="nui://${GetParentResourceName()}/web/images/${item.index}.png" alt="${item.nameItem}" class="item-image" />
                     <div class="item-details">
                         <span class="item-name">${item.nameItem}</span>
                     </div>
@@ -28,7 +28,7 @@ window.addEventListener('message', (event) => {
 });
 
 function buyItemm(item) {
-    fetch(`https://elite_arsenal/buyItem`, {
+    fetch(`https://${GetParentResourceName()}/buyItem`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
@@ -38,7 +38,7 @@ function buyItemm(item) {
 }
 
 function closeMenu() {
-    fetch(`https://elite_arsenal/closeMenu`, {
+    fetch(`https://${GetParentResourceName()}/closeMenu`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8'
