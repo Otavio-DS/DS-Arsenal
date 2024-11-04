@@ -1,0 +1,124 @@
+body {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.6);
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+.menu-container {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 12px;
+    width: 600px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #fff;
+}
+
+.menu-header span {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.tab-button, .close-button {
+    background-color: #3cb371;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.tab-button.active {
+    background-color: #4caf50;
+}
+
+.close-button {
+    background-color: #e74c3c;
+}
+
+.menu-content {
+    padding: 15px 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.menu-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.menu-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px; 
+}
+
+.menu-content::-webkit-scrollbar-thumb {
+    background-color: #3cb371; 
+    border-radius: 8px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.menu-content {
+    scrollbar-color: #3cb371 rgba(255, 255, 255, 0.1);
+    scrollbar-width: thin;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    justify-content: space-between;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 15px; 
+}
+
+.item-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.item-name {
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.item-price {
+    font-size: 1em;
+    font-weight: bold;
+    color: #ffeb3b;
+    text-align: center;
+    flex: 1;
+}
+
+.action-button {
+    background-color: #32cd32;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 1em;
+}
