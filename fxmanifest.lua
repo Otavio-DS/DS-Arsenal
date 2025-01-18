@@ -1,6 +1,3 @@
-dependency "PL_PROTECT"
-client_script "@PL_PROTECT/lib/plclient.lua"
-server_script "@PL_PROTECT/lib/plserver.lua"
 fx_version 'cerulean'
 game 'gta5'
 
@@ -20,7 +17,8 @@ client_scripts {
 }
 
 server_scripts {
-	'server.lua'
+	'server.lua',
+	'functions.lua'
 }
 
 

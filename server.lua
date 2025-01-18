@@ -3,8 +3,8 @@ Proxy = module("vrp","lib/Proxy")
 vRP = Proxy.getInterface("vRP")
 vRPclient = Tunnel.getInterface("vRP")
 DS = {}
-Tunnel.bindInterface("elite_arsenal", DS)
-vCLIENT = Tunnel.getInterface("elite_arsenal")
+Tunnel.bindInterface("DS_arsenal", DS)
+vCLIENT = Tunnel.getInterface("DS_arsenal")
 
 function SendWebhookMessage(webhook,message) 
 	if webhook ~= nil and webhook ~= "" then
@@ -14,9 +14,9 @@ end
 
 function DS.checkPermission(x,y,z)
     local source = source
-    local user_id = vRP.getUserId(source)
+    local user_id = getUserId(source)
     for k,v in pairs(configArsenal['arsenalCoords']) do
-        if vRP.hasPermission(user_id,k) then
+        if hasPermission(user_id,v.permission) then
             if vec3(x,y,z) == v['coords'] then
                 return true, v['arsenalItems']
             end
@@ -24,24 +24,45 @@ function DS.checkPermission(x,y,z)
     end
 end
 
+function clearArsenalItems(user_id)
+    local source = getUserSource(user_id)
+    for _,get in pairs(configArsenal['arsenalCoords']) do
+        for _,v in pairs(get['arsenalItems']) do
+            if tryGetInventoryItem(user_id,v['item'], getInventoryItemAmount(user_id,v['item'])) then
+                if source then
+                    TriggerClientEvent('Notify',source, 'sucesso','Items de serviço removidos',5000)
+                end
+            end
+            Wait(1000)
+        end
+    end
+end
+exports('clearArsenalItems',clearArsenalItems)
+
 function DS.buyItem(item)
     local source = source
-    local user_id = vRP.getUserId(source)
-    local identity = vRP.getUserIdentity(user_id)
+    local user_id = getUserId(source)
+    local identity = getUserIdentity(user_id)
     for _,get in pairs(configArsenal['arsenalCoords']) do
         for _,v in pairs(get['arsenalItems']) do
             if v['item'] == item then
-                if vRP.hasPermission(user_id, v['permission']) then
+                if hasPermission(user_id, v['permission']) then
                     if v['typeItem'] == 'item' then
-                        vRP.giveInventoryItem(user_id,item,1,true)
-                        SendWebhookMessage(configArsenal['logs']['getItem'],"```prolog\n[ID]: "..user_id.." "..identity.name.." "..identity.firstname.." \n[PEGOU ITEM NO ARSENAL]: "..v['nameItem'].." \n[PERMISSÃO]: "..v['permission'].." \n"..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").."```")
+                        giveInventoryItem(user_id,item,v['quantity'],true)
+                        SendWebhookMessage(configArsenal['logs']['getItem'],"```prolog\n[ID]: "..user_id.." "..identity.name.." "..identity.name2.." \n[PEGOU ITEM NO ARSENAL]: "..v['nameItem'].." \n[PERMISSÃO]: "..v['permission'].." \n"..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").."```")
+                        return
+                    elseif v['typeItem'] == 'weaponHand' then
+                        giveInventoryItem(user_id,'wbody|'..item,1,true)
+                        SendWebhookMessage(configArsenal['logs']['getWeapon'],"```prolog\n[ID]: "..user_id.." "..identity.name.." "..identity.name2.." \n[PEGOU ARMA NO ARSENAL]: "..v['nameItem'].." \n[PERMISSÃO]: "..v['permission'].." \n"..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").."```")
+                        return
                     elseif v['typeItem'] == 'weapon' then
-                        vRP.giveInventoryItem(user_id,'wbody|'..item,1,true)
-                        vRP.giveInventoryItem(user_id,'wammo|'..item,250,true)
-                        SendWebhookMessage(configArsenal['logs']['getWeapon'],"```prolog\n[ID]: "..user_id.." "..identity.name.." "..identity.firstname.." \n[PEGOU ARMA NO ARSENAL]: "..v['nameItem'].." \n[PERMISSÃO]: "..v['permission'].." \n"..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").."```")
+                        giveInventoryItem(user_id,'wbody|'..item,1,true)
+                        giveInventoryItem(user_id,'wammo|'..item,250,true)
+                        SendWebhookMessage(configArsenal['logs']['getWeapon'],"```prolog\n[ID]: "..user_id.." "..identity.name.." "..identity.name2.." \n[PEGOU ARMA NO ARSENAL]: "..v['nameItem'].." \n[PERMISSÃO]: "..v['permission'].." \n"..os.date("\n[Data]: %d/%m/%Y [Hora]: %H:%M:%S").."```")
+                        return  
                     end
                 else
-                    TriggerClientEvent('Notify',source,'negado','Você não tem permissão para comprar este item!',5000)
+                    TriggerClientEvent('Notify',source,'negado','Você não tem permissão para pegar este item!',5000)
                 end
             end
         end
